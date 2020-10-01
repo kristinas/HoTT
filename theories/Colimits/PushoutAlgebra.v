@@ -69,18 +69,23 @@ Section PushoutAssumptions.
   Global Instance is01cat_pushoutalgebra : Is01Cat PushoutAlgebra
     := Build_Is01Cat _ _ pam_id pam_compose.
 
+  (** So the definition can be used we assume falsehood to keep things transparent. *)
+  Axiom sorry : Empty.
+  Ltac sorry := rapply (Empty_ind (fun _ => _) sorry).
+  
   Global Instance is1cat_pushoutalgebra : Is1Cat PushoutAlgebra.
   Proof.
     snrapply Build_Is1Cat.
     3: intros X Y; apply is0gpd_paths.
     (** This is routine and I can't be bothered to do it right now. *)
-  Admitted.
+    all: sorry.
+  Defined.
 
   (** Now that we have a wild 1-cat structure on PushoutAlgebra we can state the theorem we wish to prove. *)
 
   Section MainProof.
 
-    Context  (X : PushoutAlgebra) `{!IsInitial X}
+    Context  (X : PushoutAlgebra) {H : IsInitial X}
       (P : pa_type X -> Type)
       (l : forall b : B, P (pa_inl X b))
       (r : forall c : C, P (pa_inr X c))
@@ -100,9 +105,23 @@ Section PushoutAssumptions.
         + exact (gl a).
     Defined.
 
+    Definition h : X $-> pa_sig := (H pa_sig).1.
+
+    Definition isinitial_initial_morphism
+      : forall g : X $-> pa_sig, g = h
+      := (H pa_sig).2.
+
+    Lemma lemma1 : pr1 o pam_fun h == idmap.
+    Proof.
+      simpl.
+    Admitted.
+
     Theorem pushout_ind_hinitial : forall w : pa_type X, P w.
     Proof.
-    Admitted.
+      intro w.
+      refine (transport P (lemma1 w) _).
+      apply pr2.
+    Defined.
 
   End MainProof.
 
