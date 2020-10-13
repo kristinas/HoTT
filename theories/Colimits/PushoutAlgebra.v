@@ -218,7 +218,7 @@ Section PushoutAssumptions.
 
     Definition F : X $-> pa_sig := (H pa_sig).1.
 
-    Let E {a b : sig P} (p q : a = b)
+    Let E {a b : sig P} {p q : a = b}
       : p = q <~> 1 @ p = q @ 1.
     Proof.
       transitivity (p = q @ 1).
@@ -310,7 +310,7 @@ Section PushoutAssumptions.
       : apD pushout_ind_hinitial p @ comp b2 t2 = ap (transport P p) (comp b1 t1) @ q.
     Proof.
       destruct p; destruct q; revert psi; revert phi.
-      srapply (functor_forall_equiv_pb (E b2 b1)); intro phi; destruct phi; intro Hlr.
+      srapply (functor_forall_equiv_pb E); intro phi; destruct phi; intro Hlr.
       assert (Ht : t1 = t2).
       2: destruct Ht; refine (_ @ (concat_p1 _)^); reflexivity.
       refine (cancelL (concat_p1 (_ @ 1)) _ _ (left_red _ @ _ @ right_red _)).
