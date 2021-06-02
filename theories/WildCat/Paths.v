@@ -22,3 +22,17 @@ Proof.
   constructor.
   intros x y p; exact (p^).
 Defined.
+
+Local Instance is1cat_paths (A : Type) : Is1Cat A.
+Proof.
+  unshelve econstructor.
+  { intros a b c g; split; intros h i j.
+    exact (whiskerR j g). }
+  { intros a b c g; split; intros h i j.
+    exact (whiskerL g j). }
+  { intros a b c d f g h.
+    apply concat_p_pp. }
+  1: intros a b f; apply concat_p1.
+  intros a b f; apply concat_1p.
+Defined.
+    
