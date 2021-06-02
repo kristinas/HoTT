@@ -1,7 +1,7 @@
 Require Import Basics Types WildCat.
 
 Global Existing Instances
-  isgraph_paths is01cat_paths is0gpd_paths is1cat_paths
+  isgraph_paths is01cat_paths is0gpd_paths is1cat_paths hasequivs_paths
   | 1000.
 
 Local Definition C {X} {a : X} {x y u v : a = a} p q :
@@ -73,10 +73,8 @@ Section SquareInv.
   Local Definition squareInv :
     ab1 @ b01^ = a01^ @ ab0.
   Proof.
-    induction a01; induction b01.
-    revert phi; srapply (equiv_ind I^-1); intro phi.
-    induction phi.
-    srapply (I^-1 idpath).
+    change (Square (A:=X) a01 b01 ab0 ab1) in phi.
+    exact (vinverse (A:=X) _ _ phi).
   Defined.
 
 End SquareInv.
