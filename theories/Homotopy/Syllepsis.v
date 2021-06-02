@@ -1,4 +1,8 @@
-Require Import Basics Types.
+Require Import Basics Types WildCat.
+
+Global Existing Instances
+  isgraph_paths is01cat_paths is0gpd_paths is1cat_paths
+  | 1000.
 
 Local Definition C {X} {a : X} {x y u v : a = a} p q :
   whiskerL u p @ whiskerR q y = whiskerR q x @ whiskerL v p.
@@ -48,11 +52,13 @@ Section TwoSquares.
   Local Definition twoSquares :
     (ab0 @ bc0) @ c01 = a01 @ (ab1 @ bc1).
   Proof.
-    induction a01; induction b01; induction c01.
-    revert phi; srapply (equiv_ind I^-1); intro phi.
-    revert theta; srapply (equiv_ind I^-1); intro theta.
-    induction phi; induction theta.
-    srapply (I^-1 idpath).
+    (** Here are squares from wildcat being used *)
+    (** Unforunately you need to manually specify the A argument since coq is dumb. A is the wildcat arugment, just stick in the type and the commands above will magically invoke the categorical structure of types here. *)
+    change (Square (A:=X) a01 b01 ab0 ab1) in phi.
+    change (Square (A:=X) b01 c01 bc0 bc1) in theta.
+    (** as you can see exact same as before (definitionally equal) *)
+    (** but now you can use square lemmas like *)
+    exact (hconcat phi theta).
   Defined.
 
 End TwoSquares.
