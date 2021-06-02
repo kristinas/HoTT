@@ -1,5 +1,6 @@
 Require Import Basics.
 Require Import WildCat.Core.
+Require Import WildCat.Equiv.
 
 (** * Path groupoids as wild categories *)
 
@@ -35,4 +36,16 @@ Proof.
   1: intros a b f; apply concat_p1.
   intros a b f; apply concat_1p.
 Defined.
-    
+
+Local Instance hasequivs_paths (A : Type) : HasEquivs A.
+Proof.
+  unshelve econstructor.
+  1: exact paths.
+  1: intros a b p; exact Unit.
+  all: try simpl; trivial.
+  1: by intros; symmetry.
+  1: intros; simpl; apply concat_pV.
+  1: intros; simpl; apply concat_Vp.
+Defined.
+  
+   
